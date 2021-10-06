@@ -58,26 +58,26 @@ async function convert_audio(input) {
 const SETTINGS_FILE = 'settings.json';
 
 let DISCORD_TOK = null;
-let WITAI_TOK = null;
-let SPEECH_METHOD = 'witai'; // witai, google, vosk
+let WITAPIKEY = null;
+let SPEECH_METHOD = 'witai';
 
 function loadConfig() {
     if (fs.existsSync(SETTINGS_FILE)) {
         const CFG_DATA = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
         DISCORD_TOK = CFG_DATA.DISCORD_TOK;
-        WITAI_TOK = CFG_DATA.WITAI_TOK;
+        WITAPIKEY = CFG_DATA.WITAPIKEY;
         SPEECH_METHOD = CFG_DATA.SPEECH_METHOD;
     }
     DISCORD_TOK = process.env.DISCORD_TOK || DISCORD_TOK;
-    WITAI_TOK = process.env.WITAI_TOK || WITAI_TOK;
+    WITAPIKEY = process.env.WITAPIKEY || WITAPIKEY;
     SPEECH_METHOD = process.env.SPEECH_METHOD || SPEECH_METHOD;
 
-    if (!['witai', 'google', 'vosk'].includes(SPEECH_METHOD))
+    if (!['witai'].includes(SPEECH_METHOD))
         throw 'invalid or missing SPEECH_METHOD'
     if (!DISCORD_TOK)
         throw 'invalid or missing DISCORD_TOK'
-    if (SPEECH_METHOD === 'witai' && !WITAI_TOK)
-        throw 'invalid or missing WITAI_TOK'
+    if (SPEECH_METHOD === 'witai' && !WITAPIKEY)
+        throw 'invalid or missing WITAPIKEY'
     if (SPEECH_METHOD === 'google' && !fs.existsSync('./gspeech_key.json'))
         throw 'missing gspeech_key.json'
 
@@ -93,7 +93,7 @@ function listWitAIApps(cb) {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + WITAI_TOK,
+            'Authorization': 'Bearer ' + WITAPIKEY,
         },
     }
 
@@ -122,7 +122,7 @@ function updateWitAIAppLang(appID, lang, cb) {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + WITAI_TOK,
+            'Authorization': 'Bearer ' + WITAPIKEY,
         },
     }
     const data = JSON.stringify({
@@ -225,10 +225,6 @@ discordClient.on('message', async (msg) => {
                         })
                     }
                 })
-            } else if (SPEECH_METHOD === 'vosk') {
-                let val = guildMap.get(mapKey);
-                const lang = msg.content.replace(_CMD_LANG, '').trim().toLowerCase()
-                val.selected_lang = lang;
             } else {
                 msg.reply('Error: this feature is only for Google')
             }
@@ -307,7 +303,7 @@ function speak_impl(voice_Connection, mapKey) {
             const duration = buffer.length / 48000 / 4;
             console.log("duration: " + duration)
 
-            if (SPEECH_METHOD === 'witai' || SPEECH_METHOD === 'google') {
+            if (SPEECH_METHOD === 'witai') {
                 if (duration < 1.0 || duration > 19) { // 20 seconds max dur
                     console.log("TOO SHORT / TOO LONG; SKPPING")
                     return;
@@ -366,7 +362,7 @@ async function transcribe_witai(buffer) {
         const extractSpeechIntent = util.promisify(witClient.extractSpeechIntent);
         var stream = Readable.from(buffer);
         const contenttype = "audio/raw;encoding=signed-integer;bits=16;rate=48k;endian=little"
-        const output = await extractSpeechIntent(WITAI_TOK, stream, contenttype)
+        const output = await extractSpeechIntent(WITAPIKEY, stream, contenttype)
         witAI_lastcallTS = Math.floor(new Date());
         console.log(output)
         stream.destroy()
