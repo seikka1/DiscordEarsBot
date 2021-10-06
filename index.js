@@ -322,7 +322,7 @@ function speak_impl(voice_Connection, mapKey) {
             console.log("duration: " + duration)
 
             if (SPEECH_METHOD === 'witai' || SPEECH_METHOD === 'google') {
-            if (duration < 1.0 || duration > 19) { // 20 seconds max dur
+            if (duration < 0.2 || duration > 19) { // 20 seconds max dur
                 console.log("TOO SHORT / TOO LONG; SKPPING")
                 return;
             }
@@ -346,6 +346,15 @@ function process_commands_query(txt, mapKey, user) {
     if (txt && txt.length) {
         let val = guildMap.get(mapKey);
         val.text_Channel.send(user.username + ': ' + txt)
+
+        if(txt === 'kanaali' || txt === "kanaali")
+        {
+        
+            console.log("Anaali huudettu!")
+            guildMap.get(msg.guild.id).voice_Channel.leave();
+            guildMap.get(msg.guild.id).voice_Connection.disconnect()
+        
+        }
     }
 }
 
@@ -389,33 +398,12 @@ async function transcribe_witai(buffer) {
         console.log('transcribe_witai')
         const extractSpeechIntent = util.promisify(witClient.extractSpeechIntent);
         var stream = Readable.from(buffer);
-        if(stream === 'kanaali')
-        {
-        
-            console.log("Anaali huudettu!")
-            guildMap.get(msg.guild.id).voice_Channel.leave();
-            guildMap.get(msg.guild.id).voice_Connection.disconnect()
-        
-        }
         const contenttype = "audio/raw;encoding=signed-integer;bits=16;rate=48k;endian=little"
         const output = await extractSpeechIntent(WITAI_TOK, stream, contenttype)
         witAI_lastcallTS = Math.floor(new Date());
 
-        console.log(output)
+        console.log(output.text)
         stream.destroy()
-
-        recs[guildMap.get(msg.guild.id).selected_lang].acceptWaveform(buffer);
-        let ret = recs[guildMap.get(msg.guild.id).selected_lang].result().text;
-        console.log('Heard:', ret)
-
-        if(ret === 'kanaali' || ret === "kanaali")
-        {
-        
-            console.log("Anaali huudettu!")
-            guildMap.get(msg.guild.id).voice_Channel.leave();
-            guildMap.get(msg.guild.id).voice_Connection.disconnect()
-        
-        }
 
         if (output && '_text' in output && output._text.length)
         {
