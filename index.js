@@ -57,8 +57,8 @@ async function convert_audio(input) {
 
 const SETTINGS_FILE = 'settings.json';
 
-let DISCORD_TOK = ODk1MzI0NDExMDY5MDcxNDYx.YV251Q.A2iswmL9LFBard4qn2ZPs3tzEIo;
-let WITAI_TOK = WCPYOZPDQEUWB6S4BJ52SIGDJ6GVL54K;
+let DISCORD_TOK = null;
+let WITAI_TOK = null;
 let SPEECH_METHOD = 'witai'; // witai, google, vosk
 
 function loadConfig() {
@@ -286,20 +286,6 @@ async function connect(msg, mapKey) {
     }
 }
 
-const vosk = require('vosk');
-let recs = {}
-if (SPEECH_METHOD === 'vosk') {
-    vosk.setLogLevel(-1);
-    // MODELS: https://alphacephei.com/vosk/models
-    recs = {
-        'en': new vosk.Recognizer({ model: new vosk.Model('vosk_models/en'), sampleRate: 48000 }),
-        // 'fr': new vosk.Recognizer({model: new vosk.Model('vosk_models/fr'), sampleRate: 48000}),
-        // 'es': new vosk.Recognizer({model: new vosk.Model('vosk_models/es'), sampleRate: 48000}),
-    }
-    // download new models if you need
-    // dev reference: https://github.com/alphacep/vosk-api/blob/master/nodejs/index.js
-}
-
 
 function speak_impl(voice_Connection, mapKey) {
     voice_Connection.on('speaking', async (user, speaking) => {
@@ -353,7 +339,7 @@ function process_commands_query(txt, mapKey, user) {
 //////////////////////////////////////////
 //////////////// SPEECH //////////////////
 //////////////////////////////////////////
-async function transcribe(buffer, mapKey) {
+async function transcribe(buffer) {
         return transcribe_witai(buffer)
 }
 
@@ -390,41 +376,6 @@ async function transcribe_witai(buffer) {
             return output.text
         return output;
     } catch (e) { console.log('transcribe_witai 851:' + e); console.log(e) }
-}
-
-// Google Speech API
-// https://cloud.google.com/docs/authentication/production
-const gspeech = require('@google-cloud/speech');
-const gspeechclient = new gspeech.SpeechClient({
-    projectId: 'discordbot',
-    keyFilename: 'gspeech_key.json'
-});
-
-async function transcribe_gspeech(buffer) {
-    try {
-        console.log('transcribe_gspeech')
-        const bytes = buffer.toString('base64');
-        const audio = {
-            content: bytes,
-        };
-        const config = {
-            encoding: 'LINEAR16',
-            sampleRateHertz: 48000,
-            languageCode: 'fi',  // https://cloud.google.com/speech-to-text/docs/languages
-        };
-        const request = {
-            audio: audio,
-            config: config,
-        };
-
-        const [response] = await gspeechclient.recognize(request);
-        const transcription = response.results
-            .map(result => result.alternatives[0].transcript)
-            .join('\n');
-        console.log(`gspeech: ${transcription}`);
-        return transcription;
-
-    } catch (e) { console.log('transcribe_gspeech 368:' + e) }
 }
 
 //////////////////////////////////////////
