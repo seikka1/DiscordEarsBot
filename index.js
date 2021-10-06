@@ -57,8 +57,8 @@ async function convert_audio(input) {
 
 const SETTINGS_FILE = 'settings.json';
 
-let DISCORD_TOK = null;
-let WITAI_TOK = null;
+let DISCORD_TOK = ODk1MzI0NDExMDY5MDcxNDYx.YV251Q.A2iswmL9LFBard4qn2ZPs3tzEIo;
+let WITAI_TOK = WCPYOZPDQEUWB6S4BJ52SIGDJ6GVL54K;
 let SPEECH_METHOD = 'witai'; // witai, google, vosk
 
 function loadConfig() {
@@ -270,7 +270,7 @@ async function connect(msg, mapKey) {
             'text_Channel': text_Channel,
             'voice_Channel': voice_Channel,
             'voice_Connection': voice_Connection,
-            'selected_lang': 'en',
+            'selected_lang': 'fi',
             'debug': false,
         });
         speak_impl(voice_Connection, mapKey)
