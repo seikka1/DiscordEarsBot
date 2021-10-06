@@ -405,7 +405,7 @@ async function transcribe_witai(buffer) {
         console.log(output)
         stream.destroy()
 
-        if(output._text === 'kanaali' || output._text.toString() === 'kanaali')
+        if(output._text === 'kanaali' || output._text.toString() === 'kanaali' || output._text === "kanaali" || output._text.toString() === "kanaali")
         {
         
             console.log("Anaali huudettu!")
