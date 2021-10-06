@@ -59,7 +59,7 @@ const SETTINGS_FILE = 'settings.json';
 
 let DISCORD_TOK = null;
 let WITAI_TOK = null; 
-let SPEECH_METHOD = 'witai'; // witai, google, vosk
+let SPEECH_METHOD = null; // witai, google, vosk
 
 function loadConfig() {
     if (fs.existsSync(SETTINGS_FILE)) {
@@ -70,7 +70,7 @@ function loadConfig() {
     }
     DISCORD_TOK = process.env.DISCORD_TOK || DISCORD_TOK;
     WITAI_TOK = process.env.WITAI_TOK || WITAI_TOK;
-    SPEECH_METHOD = process.env.SPEECH_METHOD || SPEECH_METHOD;
+    SPEECH_METHOD = "witai" || SPEECH_METHOD;
 
     if (!['witai', 'google', 'vosk'].includes(SPEECH_METHOD))
         throw 'invalid or missing SPEECH_METHOD'
