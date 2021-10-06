@@ -22,16 +22,16 @@ const { Readable } = require('stream');
 //////////////////////////////////////////
 
 function necessary_dirs() {
-    if (!fs.existsSync('./data/')){
+    if (!fs.existsSync('./data/')) {
         fs.mkdirSync('./data/');
     }
 }
 necessary_dirs()
 
 function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
 }
 
 async function convert_audio(input) {
@@ -58,12 +58,12 @@ async function convert_audio(input) {
 const SETTINGS_FILE = 'settings.json';
 
 let DISCORD_TOK = null;
-let WITAI_TOK = null; 
+let WITAI_TOK = null;
 let SPEECH_METHOD = 'vosk'; // witai, google, vosk
 
 function loadConfig() {
     if (fs.existsSync(SETTINGS_FILE)) {
-        const CFG_DATA = JSON.parse( fs.readFileSync(SETTINGS_FILE, 'utf8') );
+        const CFG_DATA = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
         DISCORD_TOK = CFG_DATA.DISCORD_TOK;
         WITAI_TOK = CFG_DATA.WITAI_TOK;
         SPEECH_METHOD = CFG_DATA.SPEECH_METHOD;
@@ -80,68 +80,68 @@ function loadConfig() {
         throw 'invalid or missing WITAI_TOK'
     if (SPEECH_METHOD === 'google' && !fs.existsSync('./gspeech_key.json'))
         throw 'missing gspeech_key.json'
-    
+
 }
 loadConfig()
 
 const https = require('https')
 function listWitAIApps(cb) {
     const options = {
-      hostname: 'api.wit.ai',
-      port: 443,
-      path: '/apps?offset=0&limit=100',
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+WITAI_TOK,
-      },
+        hostname: 'api.wit.ai',
+        port: 443,
+        path: '/apps?offset=0&limit=100',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + WITAI_TOK,
+        },
     }
 
     const req = https.request(options, (res) => {
-      res.setEncoding('utf8');
-      let body = ''
-      res.on('data', (chunk) => {
-        body += chunk
-      });
-      res.on('end',function() {
-        cb(JSON.parse(body))
-      })
+        res.setEncoding('utf8');
+        let body = ''
+        res.on('data', (chunk) => {
+            body += chunk
+        });
+        res.on('end', function () {
+            cb(JSON.parse(body))
+        })
     })
 
     req.on('error', (error) => {
-      console.error(error)
-      cb(null)
+        console.error(error)
+        cb(null)
     })
     req.end()
 }
 function updateWitAIAppLang(appID, lang, cb) {
     const options = {
-      hostname: 'api.wit.ai',
-      port: 443,
-      path: '/apps/' + appID,
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+WITAI_TOK,
-      },
+        hostname: 'api.wit.ai',
+        port: 443,
+        path: '/apps/' + appID,
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + WITAI_TOK,
+        },
     }
     const data = JSON.stringify({
-      lang
+        lang
     })
 
     const req = https.request(options, (res) => {
-      res.setEncoding('utf8');
-      let body = ''
-      res.on('data', (chunk) => {
-        body += chunk
-      });
-      res.on('end',function() {
-        cb(JSON.parse(body))
-      })
+        res.setEncoding('utf8');
+        let body = ''
+        res.on('data', (chunk) => {
+            body += chunk
+        });
+        res.on('end', function () {
+            cb(JSON.parse(body))
+        })
     })
     req.on('error', (error) => {
-      console.error(error)
-      cb(null)
+        console.error(error)
+        cb(null)
     })
     req.write(data)
     req.end()
@@ -163,12 +163,12 @@ discordClient.on('ready', () => {
 discordClient.login(DISCORD_TOK)
 
 const PREFIX = '*';
-const _CMD_HELP        = PREFIX + 'help';
-const _CMD_JOIN        = PREFIX + 'join';
-const _CMD_LEAVE       = PREFIX + 'leave';
-const _CMD_DEBUG       = PREFIX + 'debug';
-const _CMD_TEST        = PREFIX + 'hello';
-const _CMD_LANG        = PREFIX + 'lang';
+const _CMD_HELP = PREFIX + 'help';
+const _CMD_JOIN = PREFIX + 'join';
+const _CMD_LEAVE = PREFIX + 'leave';
+const _CMD_DEBUG = PREFIX + 'debug';
+const _CMD_TEST = PREFIX + 'hello';
+const _CMD_LANG = PREFIX + 'lang';
 
 const guildMap = new Map();
 
@@ -212,25 +212,25 @@ discordClient.on('message', async (msg) => {
         }
         else if (msg.content.split('\n')[0].split(' ')[0].trim().toLowerCase() == _CMD_LANG) {
             if (SPEECH_METHOD === 'witai') {
-              const lang = msg.content.replace(_CMD_LANG, '').trim().toLowerCase()
-              listWitAIApps(data => {
-                if (!data.length)
-                  return msg.reply('no apps found! :(')
-                for (const x of data) {
-                  updateWitAIAppLang(x.id, lang, data => {
-                    if ('success' in data)
-                      msg.reply('succes!')
-                    else if ('error' in data && data.error !== 'Access token does not match')
-                      msg.reply('Error: ' + data.error)
-                  })
-                }
-              })
+                const lang = msg.content.replace(_CMD_LANG, '').trim().toLowerCase()
+                listWitAIApps(data => {
+                    if (!data.length)
+                        return msg.reply('no apps found! :(')
+                    for (const x of data) {
+                        updateWitAIAppLang(x.id, lang, data => {
+                            if ('success' in data)
+                                msg.reply('succes!')
+                            else if ('error' in data && data.error !== 'Access token does not match')
+                                msg.reply('Error: ' + data.error)
+                        })
+                    }
+                })
             } else if (SPEECH_METHOD === 'vosk') {
-              let val = guildMap.get(mapKey);
-              const lang = msg.content.replace(_CMD_LANG, '').trim().toLowerCase()
-              val.selected_lang = lang;
+                let val = guildMap.get(mapKey);
+                const lang = msg.content.replace(_CMD_LANG, '').trim().toLowerCase()
+                val.selected_lang = lang;
             } else {
-              msg.reply('Error: this feature is only for Google')
+                msg.reply('Error: this feature is only for Google')
             }
         }
     } catch (e) {
@@ -241,21 +241,21 @@ discordClient.on('message', async (msg) => {
 
 function getHelpString() {
     let out = '**COMMANDS:**\n'
-        out += '```'
-        out += PREFIX + 'join\n';
-        out += PREFIX + 'leave\n';
-        out += PREFIX + 'lang <code>\n';
-        out += '```'
+    out += '```'
+    out += PREFIX + 'join\n';
+    out += PREFIX + 'leave\n';
+    out += PREFIX + 'lang <code>\n';
+    out += '```'
     return out;
 }
 
 const SILENCE_FRAME = Buffer.from([0xF8, 0xFF, 0xFE]);
 
 class Silence extends Readable {
-  _read() {
-    this.push(SILENCE_FRAME);
-    this.destroy();
-  }
+    _read() {
+        this.push(SILENCE_FRAME);
+        this.destroy();
+    }
 }
 
 async function connect(msg, mapKey) {
@@ -270,11 +270,11 @@ async function connect(msg, mapKey) {
             'text_Channel': text_Channel,
             'voice_Channel': voice_Channel,
             'voice_Connection': voice_Connection,
-            'selected_lang': 'fi',
+            'selected_lang': 'en',
             'debug': false,
         });
         speak_impl(voice_Connection, mapKey)
-        voice_Connection.on('disconnect', async(e) => {
+        voice_Connection.on('disconnect', async (e) => {
             if (e) console.log(e);
             guildMap.delete(mapKey);
         })
@@ -289,15 +289,15 @@ async function connect(msg, mapKey) {
 const vosk = require('vosk');
 let recs = {}
 if (SPEECH_METHOD === 'vosk') {
-  vosk.setLogLevel(-1);
-  // MODELS: https://alphacephei.com/vosk/models
-  recs = {
-    'en': new vosk.Recognizer({model: new vosk.Model('vosk_models/en'), sampleRate: 48000}),
-    // 'fr': new vosk.Recognizer({model: new vosk.Model('vosk_models/fr'), sampleRate: 48000}),
-    // 'es': new vosk.Recognizer({model: new vosk.Model('vosk_models/es'), sampleRate: 48000}),
-  }
-  // download new models if you need
-  // dev reference: https://github.com/alphacep/vosk-api/blob/master/nodejs/index.js
+    vosk.setLogLevel(-1);
+    // MODELS: https://alphacephei.com/vosk/models
+    recs = {
+        'en': new vosk.Recognizer({ model: new vosk.Model('vosk_models/en'), sampleRate: 48000 }),
+        // 'fr': new vosk.Recognizer({model: new vosk.Model('vosk_models/fr'), sampleRate: 48000}),
+        // 'es': new vosk.Recognizer({model: new vosk.Model('vosk_models/es'), sampleRate: 48000}),
+    }
+    // download new models if you need
+    // dev reference: https://github.com/alphacep/vosk-api/blob/master/nodejs/index.js
 }
 
 
@@ -309,7 +309,7 @@ function speak_impl(voice_Connection, mapKey) {
         console.log(`I'm listening to ${user.username}`)
         // this creates a 16-bit signed PCM, stereo 48KHz stream
         const audioStream = voice_Connection.receiver.createStream(user, { mode: 'pcm' })
-        audioStream.on('error',  (e) => { 
+        audioStream.on('error', (e) => {
             console.log('audioStream: ' + e)
         });
         let buffer = [];
@@ -322,10 +322,10 @@ function speak_impl(voice_Connection, mapKey) {
             console.log("duration: " + duration)
 
             if (SPEECH_METHOD === 'witai' || SPEECH_METHOD === 'google') {
-            if (duration < 1.0 || duration > 19) { // 20 seconds max dur
-                console.log("TOO SHORT / TOO LONG; SKPPING")
-                return;
-            }
+                if (duration < 1.0 || duration > 19) { // 20 seconds max dur
+                    console.log("TOO SHORT / TOO LONG; SKPPING")
+                    return;
+                }
             }
 
             try {
@@ -347,13 +347,6 @@ function process_commands_query(txt, mapKey, user) {
         let val = guildMap.get(mapKey);
         val.text_Channel.send(user.username + ': ' + txt)
     }
-
-    if (txt == "book")
-    {
-
-        val.voice_Channel.leave();
-
-    }
 }
 
 
@@ -361,17 +354,17 @@ function process_commands_query(txt, mapKey, user) {
 //////////////// SPEECH //////////////////
 //////////////////////////////////////////
 async function transcribe(buffer, mapKey) {
-  if (SPEECH_METHOD === 'witai') {
-      return transcribe_witai(buffer)
-  } else if (SPEECH_METHOD === 'google') {
-      return transcribe_gspeech(buffer)
-  } else if (SPEECH_METHOD === 'vosk') {
-      let val = guildMap.get(mapKey);
-      recs[val.selected_lang].acceptWaveform(buffer);
-      let ret = recs[val.selected_lang].result().text;
-      console.log('vosk:', ret)
-      return ret;
-  }
+    if (SPEECH_METHOD === 'witai') {
+        return transcribe_witai(buffer)
+    } else if (SPEECH_METHOD === 'google') {
+        return transcribe_gspeech(buffer)
+    } else if (SPEECH_METHOD === 'vosk') {
+        let val = guildMap.get(mapKey);
+        recs[val.selected_lang].acceptWaveform(buffer);
+        let ret = recs[val.selected_lang].result().text;
+        console.log('vosk:', ret)
+        return ret;
+    }
 }
 
 // WitAI
@@ -381,7 +374,7 @@ async function transcribe_witai(buffer) {
     try {
         // ensure we do not send more than one request per second
         if (witAI_lastcallTS != null) {
-            let now = Math.floor(new Date());    
+            let now = Math.floor(new Date());
             while (now - witAI_lastcallTS < 1000) {
                 console.log('sleep')
                 await sleep(100);
@@ -413,38 +406,37 @@ async function transcribe_witai(buffer) {
 // https://cloud.google.com/docs/authentication/production
 const gspeech = require('@google-cloud/speech');
 const gspeechclient = new gspeech.SpeechClient({
-  projectId: 'discordbot',
-  keyFilename: 'gspeech_key.json'
+    projectId: 'discordbot',
+    keyFilename: 'gspeech_key.json'
 });
 
 async function transcribe_gspeech(buffer) {
-  try {
-      console.log('transcribe_gspeech')
-      const bytes = buffer.toString('base64');
-      const audio = {
-        content: bytes,
-      };
-      const config = {
-        encoding: 'LINEAR16',
-        sampleRateHertz: 48000,
-        languageCode: 'fi-FI',  // https://cloud.google.com/speech-to-text/docs/languages
-      };
-      const request = {
-        audio: audio,
-        config: config,
-      };
+    try {
+        console.log('transcribe_gspeech')
+        const bytes = buffer.toString('base64');
+        const audio = {
+            content: bytes,
+        };
+        const config = {
+            encoding: 'LINEAR16',
+            sampleRateHertz: 48000,
+            languageCode: 'en-US',  // https://cloud.google.com/speech-to-text/docs/languages
+        };
+        const request = {
+            audio: audio,
+            config: config,
+        };
 
-      const [response] = await gspeechclient.recognize(request);
-      const transcription = response.results
-        .map(result => result.alternatives[0].transcript)
-        .join('\n');
-      console.log(`gspeech: ${transcription}`);
-      return transcription;
+        const [response] = await gspeechclient.recognize(request);
+        const transcription = response.results
+            .map(result => result.alternatives[0].transcript)
+            .join('\n');
+        console.log(`gspeech: ${transcription}`);
+        return transcription;
 
-  } catch (e) { console.log('transcribe_gspeech 368:' + e) }
+    } catch (e) { console.log('transcribe_gspeech 368:' + e) }
 }
 
 //////////////////////////////////////////
 //////////////////////////////////////////
 //////////////////////////////////////////
-
