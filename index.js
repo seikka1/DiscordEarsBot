@@ -157,7 +157,7 @@ const DISCORD_MSG_LIMIT = 2000;
 const discordClient = new Discord.Client()
 if (process.env.DEBUG)
     discordClient.on('debug', console.debug);
-discordClient.on('ready', () => {tmpraw
+discordClient.on('ready', () => {
     console.log(`Logged in as ${discordClient.user.tag}!`)
 })
 discordClient.login(DISCORD_TOK)
@@ -270,7 +270,7 @@ async function connect(msg, mapKey) {
             'text_Channel': text_Channel,
             'voice_Channel': voice_Channel,
             'voice_Connection': voice_Connection,
-            'selected_lang': 'fi',
+            'selected_lang': 'en',
             'debug': false,
         });
         speak_impl(voice_Connection, mapKey)
@@ -328,6 +328,15 @@ function speak_impl(voice_Connection, mapKey) {
                 }
             }
 
+            try {
+                let new_buffer = await convert_audio(buffer)
+                let out = await transcribe(new_buffer, mapKey);
+                if (out != null)
+                    process_commands_query(out, mapKey, user);
+            } catch (e) {
+                console.log('tmpraw rename: ' + e)
+            }
+
 
         })
     })
@@ -345,10 +354,7 @@ function process_commands_query(txt, mapKey, user) {
 //////////////// SPEECH //////////////////
 //////////////////////////////////////////
 async function transcribe(buffer, mapKey) {
-    if (SPEECH_METHOD === 'witai') {
         return transcribe_witai(buffer)
-    } else if (SPEECH_METHOD === 'google') {
-        return transcribe_gspeech(buffer)
 }
 
 // WitAI
@@ -404,7 +410,7 @@ async function transcribe_gspeech(buffer) {
         const config = {
             encoding: 'LINEAR16',
             sampleRateHertz: 48000,
-            languageCode: 'fi-FI',  // https://cloud.google.com/speech-to-text/docs/languages
+            languageCode: 'fi',  // https://cloud.google.com/speech-to-text/docs/languages
         };
         const request = {
             audio: audio,
