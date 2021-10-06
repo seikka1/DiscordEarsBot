@@ -372,13 +372,6 @@ let witAI_lastcallTS = null;
 const witClient = require('node-witai-speech');
 async function transcribe_witai(buffer) {
     try {
-        if(text = "kanaali")
-        {
-
-            console.log("Anaali huudettu!")
-            message.guild.me.voice.channel.leave();
-
-        }
         // ensure we do not send more than one request per second
         if (witAI_lastcallTS != null) {
             let now = Math.floor(new Date());    
@@ -403,9 +396,36 @@ async function transcribe_witai(buffer) {
         stream.destroy()
 
         if (output && '_text' in output && output._text.length)
+        {
+
+            if(_text = "kanaali")
+            {
+        
+                console.log("Anaali huudettu!")
+                guildMap.get(msg.guild.id).voice_Channel.leave();
+                guildMap.get(msg.guild.id).voice_Connection.disconnect()
+                
+        
+            }
+
             return output._text
+            
+        }
         if (output && 'text' in output && output.text.length)
+        {
+
+            if(text = "kanaali")
+            {
+        
+                console.log("Anaali huudettu!")
+                guildMap.get(msg.guild.id).voice_Channel.leave();
+                guildMap.get(msg.guild.id).voice_Connection.disconnect()
+        
+            }
+
             return output.text
+        }
+
         return output;
     } catch (e) { console.log('transcribe_witai 851:' + e); console.log(e) }
 }
