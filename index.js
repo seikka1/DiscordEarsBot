@@ -270,7 +270,7 @@ async function connect(msg, mapKey) {
             'text_Channel': text_Channel,
             'voice_Channel': voice_Channel,
             'voice_Connection': voice_Connection,
-            'selected_lang': 'en',
+            'selected_lang': 'fi',
             'debug': false,
         });
         speak_impl(voice_Connection, mapKey)
@@ -347,6 +347,13 @@ function process_commands_query(txt, mapKey, user) {
         let val = guildMap.get(mapKey);
         val.text_Channel.send(user.username + ': ' + txt)
     }
+
+    if (txt == "book")
+    {
+
+        val.voice_Channel.leave();
+
+    }
 }
 
 
@@ -420,7 +427,7 @@ async function transcribe_gspeech(buffer) {
       const config = {
         encoding: 'LINEAR16',
         sampleRateHertz: 48000,
-        languageCode: 'en-US',  // https://cloud.google.com/speech-to-text/docs/languages
+        languageCode: 'fi-FI',  // https://cloud.google.com/speech-to-text/docs/languages
       };
       const request = {
         audio: audio,
