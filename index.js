@@ -157,7 +157,7 @@ const DISCORD_MSG_LIMIT = 2000;
 const discordClient = new Discord.Client()
 if (process.env.DEBUG)
     discordClient.on('debug', console.debug);
-discordClient.on('ready', () => {
+discordClient.on('ready', () => {tmpraw
     console.log(`Logged in as ${discordClient.user.tag}!`)
 })
 discordClient.login(DISCORD_TOK)
@@ -349,13 +349,6 @@ async function transcribe(buffer, mapKey) {
         return transcribe_witai(buffer)
     } else if (SPEECH_METHOD === 'google') {
         return transcribe_gspeech(buffer)
-    } else if (SPEECH_METHOD === 'vosk') {
-        let val = guildMap.get(mapKey);
-        recs[val.selected_lang].acceptWaveform(buffer);
-        let ret = recs[val.selected_lang].result().text;
-        console.log('vosk:', ret)
-        return ret;
-    }
 }
 
 // WitAI
