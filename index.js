@@ -328,15 +328,6 @@ function speak_impl(voice_Connection, mapKey) {
                 }
             }
 
-            try {
-                let new_buffer = await convert_audio(buffer)
-                let out = await transcribe(new_buffer, mapKey);
-                if (out != null)
-                    process_commands_query(out, mapKey, user);
-            } catch (e) {
-                console.log('tmpraw rename: ' + e)
-            }
-
 
         })
     })
