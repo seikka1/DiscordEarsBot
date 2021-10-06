@@ -376,7 +376,7 @@ async function transcribe_witai(buffer) {
         {
 
             console.log("Anaali huudettu!")
-            val.voice_Channel.leave()
+            message.guild.me.voice.channel.leave();
 
         }
         // ensure we do not send more than one request per second
@@ -401,9 +401,6 @@ async function transcribe_witai(buffer) {
         witAI_lastcallTS = Math.floor(new Date());
         console.log(output)
         stream.destroy()
-
-        console.log("Anaali huudettu!")
-        val.voice_Channel.leave()
 
         if (output && '_text' in output && output._text.length)
             return output._text
