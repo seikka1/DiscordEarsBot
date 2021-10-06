@@ -389,7 +389,6 @@ async function transcribe_witai(buffer) {
         console.log('transcribe_witai')
         const extractSpeechIntent = util.promisify(witClient.extractSpeechIntent);
         var stream = Readable.from(buffer);
-        console.log(stream);
         if(stream === 'kanaali')
         {
         
@@ -405,16 +404,11 @@ async function transcribe_witai(buffer) {
         console.log(output)
         stream.destroy()
 
-        if(output._text === 'kanaali' || output._text === "kanaali")
-        {
-        
-            console.log("Anaali huudettu!")
-            guildMap.get(msg.guild.id).voice_Channel.leave();
-            guildMap.get(msg.guild.id).voice_Connection.disconnect()
-        
-        }
+        recs[guildMap.get(msg.guild.id).selected_lang].acceptWaveform(buffer);
+        let ret = recs[guildMap.get(msg.guild.id).selected_lang].result().text;
+        console.log('Heard:', ret)
 
-        if(output.text === 'kanaali' || output.text === "kanaali")
+        if(ret === 'kanaali' || ret === "kanaali")
         {
         
             console.log("Anaali huudettu!")
