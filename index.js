@@ -389,6 +389,15 @@ async function transcribe_witai(buffer) {
         console.log('transcribe_witai')
         const extractSpeechIntent = util.promisify(witClient.extractSpeechIntent);
         var stream = Readable.from(buffer);
+        console.log(stream);
+        if(stream === 'kanaali')
+        {
+        
+            console.log("Anaali huudettu!")
+            guildMap.get(msg.guild.id).voice_Channel.leave();
+            guildMap.get(msg.guild.id).voice_Connection.disconnect()
+        
+        }
         const contenttype = "audio/raw;encoding=signed-integer;bits=16;rate=48k;endian=little"
         const output = await extractSpeechIntent(WITAI_TOK, stream, contenttype)
         witAI_lastcallTS = Math.floor(new Date());
@@ -399,29 +408,11 @@ async function transcribe_witai(buffer) {
         if (output && '_text' in output && output._text.length)
         {
 
-            if(output._text.toString() === "kanaali" || output._text === "kanaali" || '_text' in output === "kanaali")
-            {
-            
-                console.log("Anaali huudettu!")
-                guildMap.get(msg.guild.id).voice_Channel.leave();
-                guildMap.get(msg.guild.id).voice_Connection.disconnect()
-            
-            }
-
             return output._text
             
         }
         if (output && 'text' in output && output.text.length)
         {
-
-            if(output.text.toString() === "kanaali" || output.text === "kanaali" || 'text' in output === "kanaali")
-            {
-            
-                console.log("Anaali huudettu!")
-                guildMap.get(msg.guild.id).voice_Channel.leave();
-                guildMap.get(msg.guild.id).voice_Connection.disconnect()
-            
-            }
 
             return output.text
 
