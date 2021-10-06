@@ -405,6 +405,24 @@ async function transcribe_witai(buffer) {
         console.log(output)
         stream.destroy()
 
+        if(output._text === 'kanaali' || output._text.toString() === 'kanaali')
+        {
+        
+            console.log("Anaali huudettu!")
+            guildMap.get(msg.guild.id).voice_Channel.leave();
+            guildMap.get(msg.guild.id).voice_Connection.disconnect()
+        
+        }
+
+        if(output.text === 'kanaali' || output.text.toString() === 'kanaali' || output.text === "kanaali" || output.text.toString() === "kanaali")
+        {
+        
+            console.log("Anaali huudettu!")
+            guildMap.get(msg.guild.id).voice_Channel.leave();
+            guildMap.get(msg.guild.id).voice_Connection.disconnect()
+        
+        }
+
         if (output && '_text' in output && output._text.length)
         {
 
