@@ -406,29 +406,9 @@ async function transcribe_witai(buffer) {
           console.log(result);
           let outputText = result['"text"'];
 
-          if(outputText != undefined)
-          {
+          return outputText;
 
-            return outputText;
-
-          }
-
-          else
-          {
-
-            return output;
-
-          }
-            
         }
-
-        else
-        {
-
-          return output;
-        
-        }
-        
 
     }
 
