@@ -323,7 +323,7 @@ function speak_impl(voice_Connection, mapKey) {
             console.log("duration: " + duration)
 
             if (SPEECH_METHOD === 'witai' || SPEECH_METHOD === 'google') {
-            if (duration < 0.2 || duration > 19) { // 20 seconds max dur
+            if (duration < 1.0 || duration > 19) { // 20 seconds max dur
                 console.log("TOO SHORT / TOO LONG; SKPPING")
                 return;
             }
@@ -402,7 +402,9 @@ async function transcribe_witai(buffer) {
         {
 
           var jsonString = JSON.stringify(output);
-          const outputText = jsonString.split('\\"text\\": ').pop();
+          const splittedJson = jsonString.split('\\"text\\": ').pop();
+          const splittedSplitted = splittedJson.split('"');
+          const outputText = splittedSplitted[1];
           //const outputText = jsonString.substring(val.indexOf(',\n  "text": '));
           console.log(outputText)
 
