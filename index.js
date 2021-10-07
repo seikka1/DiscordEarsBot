@@ -399,11 +399,11 @@ async function transcribe_witai(buffer) {
         if (output != null)
         {
 
-            let parsedOutput = JSON.stringify(output)
-            let jsonObject = new JSONObject(parsedOutput);
-            let heardText = jsonObject.getString("text");
-            console.log(heardText);
-            return heardText;
+            var outputString = JSON.stringify(output)
+            var jsonParsedArray = JSON.parse(outputString)
+            var out = jsonParsedArray["text"];
+            console.log(out);
+            return out;
             
         }
 
