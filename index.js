@@ -347,7 +347,7 @@ function process_commands_query(txt, mapKey, user) {
         let val = guildMap.get(mapKey);
         var jsonParsed = JSON.parse(txt)
 
-        val.text_Channel.send(user.username + ': ' + jsonParsed.getString() + txt)
+        val.text_Channel.send(user.username + ': ' + txt)
     }
 }
 
@@ -402,7 +402,6 @@ async function transcribe_witai(buffer) {
         {
 
             var jsonString = JSON.stringify(output)
-            console.log(jsonString);
             return jsonString;
             
         }
