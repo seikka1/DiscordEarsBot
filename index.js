@@ -404,7 +404,7 @@ async function transcribe_witai(buffer) {
         witAI_lastcallTS = Math.floor(new Date());
         stream.destroy()
 
-        if (output && output.text.length)
+        if (!output)
         {
 
             return output.text
