@@ -399,7 +399,7 @@ async function transcribe_witai(buffer) {
         if (output != null)
         {
 
-            return output[3];
+            return output[2];
             
         }
 
