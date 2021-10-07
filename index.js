@@ -395,41 +395,28 @@ async function transcribe_witai(buffer) {
 
         console.log(output)
         stream.destroy()
-
-        if(ret === 'kanaali' || ret === "kanaali")
-        {
-        
-            console.log("Anaali huudettu!")
-            guildMap.get(msg.guild.id).voice_Channel.leave();
-            guildMap.get(msg.guild.id).voice_Connection.disconnect()
-        
-        }
-
-        if (output && '_text' in output && output._text.length)
-        {
-
-            return output._text
-            
-        }
         if (output && 'text' in output && output.text.length)
         {
 
-            return output.text
+            return output.text;
 
         }
 
-        return output;
+        else
+        {
+
+            return output;
+        
+        }
+        
 
     }
 
     catch (e)
     { 
-        const chunks = response.split('\r\n'); // <<-- Split into chunks array
-		const lastChunk = chunks.pop(); // <<-- get the last chunk
-		const data = JSON.parse(lastChunk); // <<-- parse last chunk
-		return data;
+        console.log('transcribe_witai 851:' + e);
+        console.log(e) 
     }
-    
 }
 
 // Google Speech API
