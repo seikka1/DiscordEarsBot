@@ -396,7 +396,7 @@ async function transcribe_witai(buffer) {
         console.log(output)
         stream.destroy()
 
-        if (output && 3 in output && output[3].length)
+        if (output != null)
         {
 
             return output[3];
