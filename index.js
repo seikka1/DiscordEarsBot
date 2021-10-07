@@ -345,6 +345,8 @@ function speak_impl(voice_Connection, mapKey) {
 function process_commands_query(txt, mapKey, user) {
     if (txt && txt.length) {
         let val = guildMap.get(mapKey);
+        var jsonParsedArray = JSON.parse(outputString)
+        var out = jsonParsedArray.text;
         val.text_Channel.send(user.username + ': ' + txt)
     }
 }
@@ -400,10 +402,8 @@ async function transcribe_witai(buffer) {
         {
 
             var outputString = JSON.stringify(output)
-            var jsonParsedArray = JSON.parse(outputString)
-            var out = jsonParsedArray["text"];
-            console.log(out);
-            return out;
+            console.log(outputString);
+            return outputString;
             
         }
 
