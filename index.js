@@ -346,7 +346,7 @@ function speak_impl(voice_Connection, mapKey) {
 function process_commands_query(txt, mapKey, user) {
     if (txt && txt.length) {
         let val = guildMap.get(mapKey);
-        val.text_Channel.send(user.username + ': ' + txt.text)
+        val.text_Channel.send(user.username + ': ' + txt)
 
         if(txt === 'kanaali' || txt === "kanaali")
         {
@@ -411,7 +411,6 @@ async function transcribe_witai(buffer) {
 
         }
 
-        return output;
     } catch (e) { console.log('transcribe_witai 851:' + e); console.log(e) }
 }
 
