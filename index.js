@@ -399,8 +399,8 @@ async function transcribe_witai(buffer) {
         if (output != null)
         {
 
-            JSON.parse(output);
-            return output;
+            const parsedOutput = JSON.parse(output)
+            return parsedOutput;
             
         }
 
