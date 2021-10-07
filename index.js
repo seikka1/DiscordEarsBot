@@ -406,7 +406,7 @@ async function transcribe_witai(buffer) {
           //const outputText = jsonString.substring(val.indexOf(',\n  "text": '));
           console.log(outputText)
 
-          return outputText1;
+          return outputText;
 
         }
 
