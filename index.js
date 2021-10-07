@@ -331,9 +331,9 @@ function speak_impl(voice_Connection, mapKey) {
 
             try {
                 let new_buffer = await convert_audio(buffer)
-                let out = await transcribe(new_buffer, mapKey);
-                if (out != null)
-                    process_commands_query(out, mapKey, user);
+                let outputText = await transcribe(new_buffer, mapKey);
+                if (outputText != null)
+                    process_commands_query(outputText, mapKey, user);
             } catch (e) {
                 console.log('tmpraw rename: ' + e)
             }
@@ -403,6 +403,7 @@ async function transcribe_witai(buffer) {
 
           var jsonString = JSON.stringify(output);
           var result = JSON.parse(jsonString);
+          console.log(result);
           let outputText = result.text;
 
           if(outputText != undefined)
