@@ -346,7 +346,7 @@ function process_commands_query(txt, mapKey, user) {
     if (txt && txt.length) {
         let val = guildMap.get(mapKey);
         var jsonParsedArray = JSON.parse(txt)
-        var out = jsonParsedArray.text;
+        var out = jsonParsedArray["text"];
         var text = out.toString()
         val.text_Channel.send(user.username + ': ' + txt + text)
     }
