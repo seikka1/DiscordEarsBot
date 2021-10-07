@@ -404,7 +404,7 @@ async function transcribe_witai(buffer) {
           var jsonString = JSON.stringify(output);
           var result = JSON.parse(jsonString);
           console.log(result);
-          let outputText = result.text;
+          let outputText = result['"text"'];
 
           if(outputText != undefined)
           {
