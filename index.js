@@ -332,7 +332,6 @@ function speak_impl(voice_Connection, mapKey) {
                 let new_buffer = await convert_audio(buffer)
                 let out = await transcribe(new_buffer, mapKey);
                 if (out != null)
-                    console.log(out.text)
                     process_commands_query(out, mapKey, user);
             } catch (e) {
                 console.log('tmpraw rename: ' + e)
@@ -347,15 +346,6 @@ function process_commands_query(txt, mapKey, user) {
     if (txt && txt.length) {
         let val = guildMap.get(mapKey);
         val.text_Channel.send(user.username + ': ' + txt)
-
-        if(txt === 'kanaali' || txt === "kanaali")
-        {
-        
-            console.log("Anaali huudettu!")
-            guildMap.get(msg.guild.id).voice_Channel.leave();
-            guildMap.get(msg.guild.id).voice_Connection.disconnect()
-        
-        }
     }
 }
 
@@ -402,16 +392,44 @@ async function transcribe_witai(buffer) {
         const contenttype = "audio/raw;encoding=signed-integer;bits=16;rate=48k;endian=little"
         const output = await extractSpeechIntent(WITAI_TOK, stream, contenttype)
         witAI_lastcallTS = Math.floor(new Date());
+
+        console.log(output)
         stream.destroy()
 
-        if (!output)
+        if(ret === 'kanaali' || ret === "kanaali")
+        {
+        
+            console.log("Anaali huudettu!")
+            guildMap.get(msg.guild.id).voice_Channel.leave();
+            guildMap.get(msg.guild.id).voice_Connection.disconnect()
+        
+        }
+
+        if (output && '_text' in output && output._text.length)
+        {
+
+            return output._text
+            
+        }
+        if (output && 'text' in output && output.text.length)
         {
 
             return output.text
 
         }
 
-    } catch (e) { console.log('transcribe_witai 851:' + e); console.log(e) }
+        return output;
+
+    }
+
+    catch (e)
+    { 
+        const chunks = response.split('\r\n'); // <<-- Split into chunks array
+		const lastChunk = chunks.pop(); // <<-- get the last chunk
+		const data = JSON.parse(lastChunk); // <<-- parse last chunk
+		return data;
+    }
+    
 }
 
 // Google Speech API
