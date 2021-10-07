@@ -402,9 +402,8 @@ async function transcribe_witai(buffer) {
         {
 
             var jsonString = JSON.stringify(output)
-            var outputString = jsonString.slice(-)
-            console.log(outputString);
-            return outputString;
+            console.log(jsonString);
+            return jsonString;
             
         }
 
