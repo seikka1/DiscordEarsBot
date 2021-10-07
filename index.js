@@ -400,7 +400,7 @@ async function transcribe_witai(buffer) {
         {
 
             let parsedOutput = JSON.stringify(output)
-            let jsonObject = JSONObject(parsedOutput);
+            let jsonObject = new JSONObject(parsedOutput);
             let heardText = jsonObject.getString("text");
             console.log(heardText);
             return heardText;
