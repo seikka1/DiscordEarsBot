@@ -345,9 +345,9 @@ function speak_impl(voice_Connection, mapKey) {
 function process_commands_query(txt, mapKey, user) {
     if (txt && txt.length) {
         let val = guildMap.get(mapKey);
-        var jsonParsedArray = JSON.parse(txt)
-        var out = jsonParsedArray["text"];
-        val.text_Channel.send(user.username + ': ' + txt + out)
+        var jsonParsed = JSON.parse(txt)
+
+        val.text_Channel.send(user.username + ': ' + jsonParsed)
     }
 }
 
@@ -401,7 +401,8 @@ async function transcribe_witai(buffer) {
         if (output != null)
         {
 
-            var outputString = JSON.stringify(output)
+            var jsonString = JSON.stringify(output)
+            var outputString = jsonString.slice(-)
             console.log(outputString);
             return outputString;
             
