@@ -1,6 +1,7 @@
 //////////////////////////////////////////
 //////////////// LOGGING /////////////////
 //////////////////////////////////////////
+
 function getCurrentDateString() {
     return (new Date()).toISOString() + ' ::';
 };
@@ -342,13 +343,12 @@ function speak_impl(voice_Connection, mapKey) {
     })
 }
 
-function process_commands_query(txt, mapKey, user) {
-    if (txt && txt.length) {
-        let val = guildMap.get(mapKey);
-        var jsonParsed = JSON.parse(txt)
+function process_commands_query(outputText, mapKey, user)
+{
 
-        val.text_Channel.send(user.username + ': ' + txt)
-    }
+  let val = guildMap.get(mapKey);
+  val.text_Channel.send(user.username + ': ' + outputText)
+
 }
 
 
@@ -401,15 +401,30 @@ async function transcribe_witai(buffer) {
         if (output != null)
         {
 
-            var jsonString = JSON.stringify(output)
-            return jsonString;
+          var jsonString = JSON.stringify(output);
+          var result = JSON.parse(jsonString);
+          let outputText = result.text;
+
+          if(outputText != undefined)
+          {
+
+            return outputText;
+
+          }
+
+          else
+          {
+
+            return output;
+
+          }
             
         }
 
         else
         {
 
-            return output;
+          return output;
         
         }
         
