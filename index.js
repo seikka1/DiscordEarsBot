@@ -350,11 +350,14 @@ function process_commands_query(outputText, mapKey, user)
   {
 
     let val = guildMap.get(mapKey);
-    val.text_Channel.send('@' + user.username + ' : ' + outputText)
+    val.text_Channel.send(user.username + ' : ' + outputText)
 
     if(outputText === 'kanaali')
     {
 
+      console.log(user.id);
+      const userTarget = val.guild.members.cache.get(user.id)
+      userTarget.disconnect();
       console.log("Anaali huudettu!")
 
     }
