@@ -346,7 +346,7 @@ function speak_impl(voice_Connection, mapKey) {
 function process_commands_query(outputText, mapKey, user)
 {
 
-  if(outputText != entitie)
+  if(outputText != 'entitie')
   {
 
     let val = guildMap.get(mapKey);
