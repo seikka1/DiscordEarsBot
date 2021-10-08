@@ -355,10 +355,9 @@ function process_commands_query(outputText, mapKey, user)
     if(outputText === 'kanaali')
     {
 
+      console.log("Anaali huudettu!");
       console.log(user.id);
-      const userTarget = val.guild.members.cache.get(user.id)
-      userTarget.disconnect();
-      console.log("Anaali huudettu!")
+      user.kick();
 
     }
 
