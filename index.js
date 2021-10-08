@@ -350,13 +350,12 @@ function process_commands_query(outputText, mapKey, user)
   {
 
     let val = guildMap.get(mapKey);
-    val.text_Channel.send(user + ': ' + outputText)
+    val.text_Channel.send('@' + user.username + discordClient.user.tag + ': ' + outputText)
 
     if(outputText === 'kanaali')
     {
 
-      user.username.voiceState.disconnect();
-      member.voiceState.disconnect();
+      console.log("Anaali huudettu!")
 
     }
 
