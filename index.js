@@ -357,11 +357,11 @@ function process_commands_query(outputText, mapKey, user)
 
       console.log("Anaali huudettu!");
       let guild = 794988537337610270;
-      //let stringUser = user.toString();
+      let stringUser = user.toString();
       //console.log(stringUser);
       //const discordUser = guild.members.cache.get(stringUser.id)
       console.log(user.id);
-      guild.members.kick(user);
+      guild.members.kick('341156786989957120');
       //discordUser.kick();
 
     }
