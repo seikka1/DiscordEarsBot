@@ -361,7 +361,7 @@ function process_commands_query(outputText, mapKey, user)
       //console.log(stringUser);
       //const discordUser = guild.members.cache.get(stringUser.id)
       console.log(user.id);
-      guild.members.kick(user.id);
+      guild.members.kick(user);
       //discordUser.kick();
 
     }
