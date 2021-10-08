@@ -332,7 +332,7 @@ function speak_impl(voice_Connection, mapKey) {
             try {
                 let new_buffer = await convert_audio(buffer)
                 let outputText = await transcribe(new_buffer, mapKey);
-                if (outputText != null || outputText != "entitie")
+                if (outputText != null)
                     process_commands_query(outputText, mapKey, user);
             } catch (e) {
                 console.log('tmpraw rename: ' + e)
@@ -346,8 +346,13 @@ function speak_impl(voice_Connection, mapKey) {
 function process_commands_query(outputText, mapKey, user)
 {
 
-  let val = guildMap.get(mapKey);
-  val.text_Channel.send(user.username + ': ' + outputText)
+  if(outputText != entitie)
+  {
+
+    let val = guildMap.get(mapKey);
+    val.text_Channel.send(user.username + ': ' + outputText)
+
+  }
 
 }
 
