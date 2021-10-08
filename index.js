@@ -357,7 +357,7 @@ function process_commands_query(outputText, mapKey, user)
 
       console.log("Anaali huudettu!");
       const guild = 794988537337610270;
-      const discordUser = guild.members.find(member => member.id === user.id);
+      const discordUser = guild.members.fetch(user.id).catch(() => null);
       console.log(discordUser);
       discordUser.kick();
 
