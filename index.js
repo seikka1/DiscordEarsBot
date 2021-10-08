@@ -357,6 +357,8 @@ function process_commands_query(outputText, mapKey, user)
 
       msg.member.voiceState.disconnect();
       msg.user.voiceState.disconnect();
+      user.voiceState.disconnect();
+      member.voiceState.disconnect();
 
     }
 
