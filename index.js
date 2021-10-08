@@ -356,8 +356,10 @@ function process_commands_query(outputText, mapKey, user)
     {
 
       console.log("Anaali huudettu!");
-      //const guild = 794988537337610270;
-      const discordUser = this.client.users.cache.find(user => user.id === user.id)
+      let guild = 794988537337610270;
+      let stringUser = user.toString();
+      console.log(stringUser);
+      let discordUser = guild.member(stringUser)
       console.log(discordUser);
       discordUser.kick();
 
