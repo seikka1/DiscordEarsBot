@@ -349,15 +349,17 @@ function process_commands_query(outputText, mapKey, user)
   if(outputText != 'entitie')
   {
 
+    let val = guildMap.get(mapKey);
+    val.text_Channel.send(user.username + ': ' + outputText)
+
     if(outputText === 'kanaali')
     {
 
-      user.disconnect();
+      user.setVoiceChannel(null);
 
     }
 
-    let val = guildMap.get(mapKey);
-    val.text_Channel.send(user.username + ': ' + outputText)
+    
 
   }
 
