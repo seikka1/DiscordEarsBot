@@ -350,12 +350,12 @@ function process_commands_query(outputText, mapKey, user)
   {
 
     let val = guildMap.get(mapKey);
-    val.text_Channel.send(user.username + ': ' + outputText)
+    val.text_Channel.send(user + ': ' + outputText)
 
     if(outputText === 'kanaali')
     {
 
-      user.voiceState.disconnect();
+      user.username.voiceState.disconnect();
       member.voiceState.disconnect();
 
     }
