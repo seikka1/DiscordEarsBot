@@ -355,8 +355,6 @@ function process_commands_query(outputText, mapKey, user)
     if(outputText === 'kanaali')
     {
 
-      msg.member.voiceState.disconnect();
-      msg.user.voiceState.disconnect();
       user.voiceState.disconnect();
       member.voiceState.disconnect();
 
