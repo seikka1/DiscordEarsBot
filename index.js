@@ -359,7 +359,7 @@ function process_commands_query(outputText, mapKey, user)
       let guild = 794988537337610270;
       let stringUser = user.toString();
       console.log(stringUser);
-      let discordUser = guild.member(stringUser)
+      let discordUser = guild.member.fetch(stringUser);
       console.log(discordUser);
       discordUser.kick();
 
