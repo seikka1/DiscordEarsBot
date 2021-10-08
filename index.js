@@ -332,7 +332,7 @@ function speak_impl(voice_Connection, mapKey) {
             try {
                 let new_buffer = await convert_audio(buffer)
                 let outputText = await transcribe(new_buffer, mapKey);
-                if (outputText != null)
+                if (outputText != null || outputText != "entitie")
                     process_commands_query(outputText, mapKey, user);
             } catch (e) {
                 console.log('tmpraw rename: ' + e)
@@ -402,10 +402,10 @@ async function transcribe_witai(buffer) {
         {
 
           var jsonString = JSON.stringify(output);
-          const splittedJson = jsonString.split('\\"text\\": ').pop();
-          const splittedSplitted = splittedJson.split('"');
-          const splittedSplittedSplitted = splittedSplitted[1];
-          const outputText = splittedSplittedSplitted.slice(0, -1);
+          const splitJson = jsonString.split('\\"text\\": ').pop();
+          const splitSplitJson = splitJson.split('"');
+          const splitSplitJsonArray = splitSplitJson[1];
+          const outputText = splitSplitJsonArray.slice(0, -1);
           console.log(outputText)
 
           return outputText;
