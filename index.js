@@ -350,7 +350,7 @@ function process_commands_query(outputText, mapKey, user)
   {
 
     let val = guildMap.get(mapKey);
-    val.text_Channel.send('@' + user.username + discordClient.user.tag + ': ' + outputText)
+    val.text_Channel.send('@' + user.username + ' : ' + outputText)
 
     if(outputText === 'kanaali')
     {
