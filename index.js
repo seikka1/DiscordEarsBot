@@ -357,7 +357,7 @@ function process_commands_query(outputText, mapKey, user)
 
       console.log(user.id);
       discordClient.users.cache.get(user.id).send("Perkele et sano kanaali!");
-      discordClient.guild.members.cache.get(user.id).kick();
+      //discordClient.guild.members.cache.get(user.id).kick();
 
     }
 
