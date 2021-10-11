@@ -366,6 +366,20 @@ function process_commands_query(outputText, mapKey, user)
 
     }
 
+    if(outputText === 'kanaali on hyvä kartta')
+    {
+
+      const guild = discordClient.guilds.cache.get('794988537337610270') // get the guild object
+      const member = guild.member(user) // convert the User object to a GuildMember!
+
+      console.log(member.id);
+      discordClient.users.cache.get(user.id).send("Perkele et sano kanaali!");
+      guild.members.cache.get(member.id).kick();
+
+      //discordClient.guild.members.cache.get(user.id).kick();
+
+    }
+
   }
 
 }
