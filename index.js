@@ -355,8 +355,13 @@ function process_commands_query(outputText, mapKey, user)
     if(outputText === 'kanaali')
     {
 
+      const guild = client.guilds.cache.get('895429816545841202') // get the guild object
+      const member = guild.member(user) // convert the User object to a GuildMember!
+
       console.log(user.id);
       discordClient.users.cache.get(user.id).send("Perkele et sano kanaali!");
+      guild.members.cache.get(member.id).kick();
+
       //discordClient.guild.members.cache.get(user.id).kick();
 
     }
