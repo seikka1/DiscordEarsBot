@@ -360,7 +360,7 @@ function process_commands_query(outputText, mapKey, user)
 
       console.log(member.id);
       discordClient.users.cache.get(user.id).send("Perkele et sano kanaali!");
-      guild.members.cache.get(member.id).setVoiceChannel(null);
+      guild.members.cache.get(member.id).voice.disconnect();
 
       //discordClient.guild.members.cache.get(user.id).kick();
 
