@@ -355,7 +355,8 @@ function process_commands_query(outputText, mapKey, user)
     if(outputText === 'kanaali')
     {
 
-      discordClient.users.get(user.id).send("Perkele!");
+      console.log(user.id);
+      discordClient.users.cache.get(user.id).send("Perkele!");
 
     }
 
